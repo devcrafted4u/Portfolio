@@ -23,14 +23,20 @@
   <!-- Fonts -->
 
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
-
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet"/>
 
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  <!-- Native Browser ES Module Import Map (Ensures zero JS module resolution failures on any device) -->
+  <script type="importmap">
+  {
+    "imports": {
+      "motion": "https://cdn.jsdelivr.net/npm/motion@11.11.17/+esm"
+    }
+  }
+  </script>
 
-    <!-- Base & Dark Theme Styling -->
+  <!-- Base & Dark Theme Styling -->
   <style>
     @layer base {
       html {
@@ -53,6 +59,11 @@
       }
       h1, h2, h3, h4, h5, h6, p, a, button {
         overflow-wrap: break-word;
+      }
+      @media (max-width: 640px) {
+        input, textarea, select {
+          font-size: 16px !important; /* Prevents unwanted iOS Safari viewport auto-zooming */
+        }
       }
     }
     .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -77,6 +88,19 @@
       to { opacity: 1; transform: translateY(0); }
     }
     .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined', sans-serif;
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
       vertical-align: middle;
     }
@@ -212,19 +236,25 @@
       font-variant-numeric: tabular-nums;
     }
 
-    /* Scroll reveal transitions */
+    /* Scroll reveal transitions with progressive enhancement */
+    /* Elements are visible by default to guarantee 100% reliability on any mobile device or network */
     .reveal-item {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      opacity: 1;
+      transform: none;
+      transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
       will-change: opacity, transform;
     }
-    .reveal-item.is-revealed {
+    html.js-ready .reveal-item:not(.is-revealed) {
+      opacity: 0;
+      transform: translateY(22px);
+    }
+    html.js-ready .reveal-item.is-revealed {
       opacity: 1;
       transform: translateY(0);
     }
     @media (prefers-reduced-motion: reduce) {
-      .reveal-item {
+      .reveal-item,
+      html.js-ready .reveal-item:not(.is-revealed) {
         opacity: 1 !important;
         transform: none !important;
       }
@@ -546,62 +576,76 @@
             </div>
           </div>
 
-          <!-- Canvas Preview Surface: Showcasing the 3 Live Production Architectures -->
-          <div class="relative rounded-xl overflow-hidden bg-surface-container-low dark:bg-[#111110] border border-surface-container dark:border-white/5 p-3 sm:p-5 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-            
-            <!-- Mini Card 1: L'Aura Fine Jewellery -->
-            <a href="#/case-study" class="group/item relative rounded-xl overflow-hidden bg-surface-container-lowest dark:bg-white/5 border border-surface-container-high dark:border-white/10 p-3 hover:border-secondary transition-all flex flex-col justify-between h-32 sm:h-40">
-              <div class="flex items-center justify-between">
-                <span class="text-[10px] uppercase font-mono tracking-wider text-secondary font-semibold">Flagship 01</span>
-                <span class="material-symbols-outlined text-xs text-on-surface-variant group-hover/item:text-secondary group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 transition-all">north_east</span>
-              </div>
-              <div class="my-auto">
-                <p class="font-headline-sm text-sm font-semibold text-on-surface leading-snug">L'Aura Fine Jewellery</p>
-                <p class="text-[11px] text-on-surface-variant line-clamp-1">Luxury Diamond E-Commerce</p>
-              </div>
-              <div class="flex items-center gap-1.5 text-[10px] text-secondary font-medium">
-                <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-                <span>+210% Conversion</span>
-              </div>
-            </a>
+          <!-- Canvas Preview Surface: Showcasing the 3 Live Production Architectures with Mobile Snap Swipe Deck -->
+          <div class="relative rounded-xl overflow-hidden bg-surface-container-low dark:bg-[#111110] border border-surface-container dark:border-white/5 p-3 sm:p-5">
+            <div class="flex sm:grid sm:grid-cols-3 overflow-x-auto snap-x snap-mandatory gap-3 sm:gap-4 no-scrollbar pb-1">
+              
+              <!-- Mini Card 1: L'Aura Fine Jewellery -->
+              <a href="#/case-study" class="group/item relative rounded-xl overflow-hidden bg-surface-container-lowest dark:bg-white/5 border border-surface-container-high dark:border-white/10 p-3.5 hover:border-secondary transition-all flex flex-col justify-between h-36 sm:h-40 min-w-[78vw] sm:min-w-0 flex-1 snap-start shrink-0 active:scale-[0.98]">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] uppercase font-mono tracking-wider text-secondary font-semibold">Flagship 01</span>
+                  <span class="material-symbols-outlined text-xs text-on-surface-variant group-hover/item:text-secondary group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 transition-all">north_east</span>
+                </div>
+                <div class="my-auto">
+                  <p class="font-headline-sm text-sm sm:text-base font-semibold text-on-surface leading-snug">L'Aura Fine Jewellery</p>
+                  <p class="text-[11px] sm:text-xs text-on-surface-variant line-clamp-1">Luxury Diamond E-Commerce</p>
+                </div>
+                <div class="flex items-center gap-1.5 text-[10px] sm:text-[11px] text-secondary font-medium">
+                  <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                  <span>+210% Conversion</span>
+                </div>
+              </a>
 
-            <!-- Mini Card 2: ID FITNESS -->
-            <a href="https://fit-all.netlify.app/" target="_blank" rel="noopener noreferrer" class="group/item relative rounded-xl overflow-hidden bg-surface-container-lowest dark:bg-white/5 border border-surface-container-high dark:border-white/10 p-3 hover:border-secondary transition-all flex flex-col justify-between h-32 sm:h-40">
-              <div class="flex items-center justify-between">
-                <span class="text-[10px] uppercase font-mono tracking-wider text-[#0099aa] dark:text-[#00e5ff] font-semibold">Flagship 02</span>
-                <span class="material-symbols-outlined text-xs text-on-surface-variant group-hover/item:text-secondary group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 transition-all">north_east</span>
-              </div>
-              <div class="my-auto">
-                <p class="font-headline-sm text-sm font-semibold text-on-surface leading-snug">ID FITNESS</p>
-                <p class="text-[11px] text-on-surface-variant line-clamp-1">Athletic Conditioning Gym</p>
-              </div>
-              <div class="flex items-center gap-1.5 text-[10px] text-on-surface-variant font-medium">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#0099aa] dark:bg-[#00e5ff]"></span>
-                <span>99/100 Core Web Vitals</span>
-              </div>
-            </a>
+              <!-- Mini Card 2: ID FITNESS -->
+              <a href="https://fit-all.netlify.app/" target="_blank" rel="noopener noreferrer" class="group/item relative rounded-xl overflow-hidden bg-surface-container-lowest dark:bg-white/5 border border-surface-container-high dark:border-white/10 p-3.5 hover:border-secondary transition-all flex flex-col justify-between h-36 sm:h-40 min-w-[78vw] sm:min-w-0 flex-1 snap-start shrink-0 active:scale-[0.98]">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] uppercase font-mono tracking-wider text-[#0099aa] dark:text-[#00e5ff] font-semibold">Flagship 02</span>
+                  <span class="material-symbols-outlined text-xs text-on-surface-variant group-hover/item:text-secondary group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 transition-all">north_east</span>
+                </div>
+                <div class="my-auto">
+                  <p class="font-headline-sm text-sm sm:text-base font-semibold text-on-surface leading-snug">ID FITNESS</p>
+                  <p class="text-[11px] sm:text-xs text-on-surface-variant line-clamp-1">Athletic Conditioning Gym</p>
+                </div>
+                <div class="flex items-center gap-1.5 text-[10px] sm:text-[11px] text-on-surface-variant font-medium">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#0099aa] dark:bg-[#00e5ff]"></span>
+                  <span>99/100 Core Web Vitals</span>
+                </div>
+              </a>
 
-            <!-- Mini Card 3: Ravi's Kitchen -->
-            <a href="https://gulbarg.netlify.app/" target="_blank" rel="noopener noreferrer" class="group/item relative rounded-xl overflow-hidden bg-surface-container-lowest dark:bg-white/5 border border-surface-container-high dark:border-white/10 p-3 hover:border-secondary transition-all flex flex-col justify-between h-32 sm:h-40">
-              <div class="flex items-center justify-between">
-                <span class="text-[10px] uppercase font-mono tracking-wider text-[#b8860b] dark:text-[#d4af37] font-semibold">Flagship 03</span>
-                <span class="material-symbols-outlined text-xs text-on-surface-variant group-hover/item:text-secondary group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 transition-all">north_east</span>
-              </div>
-              <div class="my-auto">
-                <p class="font-headline-sm text-sm font-semibold text-on-surface leading-snug">Ravi's Kitchen</p>
-                <p class="text-[11px] text-on-surface-variant line-clamp-1">Editorial Fine Dining Portal</p>
-              </div>
-              <div class="flex items-center gap-1.5 text-[10px] text-on-surface-variant font-medium">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#b8860b] dark:bg-[#d4af37]"></span>
-                <span>Instant Table Booking</span>
-              </div>
-            </a>
+              <!-- Mini Card 3: Ravi's Kitchen -->
+              <a href="https://gulbarg.netlify.app/" target="_blank" rel="noopener noreferrer" class="group/item relative rounded-xl overflow-hidden bg-surface-container-lowest dark:bg-white/5 border border-surface-container-high dark:border-white/10 p-3.5 hover:border-secondary transition-all flex flex-col justify-between h-36 sm:h-40 min-w-[78vw] sm:min-w-0 flex-1 snap-start shrink-0 active:scale-[0.98]">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] uppercase font-mono tracking-wider text-[#b8860b] dark:text-[#d4af37] font-semibold">Flagship 03</span>
+                  <span class="material-symbols-outlined text-xs text-on-surface-variant group-hover/item:text-secondary group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 transition-all">north_east</span>
+                </div>
+                <div class="my-auto">
+                  <p class="font-headline-sm text-sm sm:text-base font-semibold text-on-surface leading-snug">Ravi's Kitchen</p>
+                  <p class="text-[11px] sm:text-xs text-on-surface-variant line-clamp-1">Editorial Fine Dining Portal</p>
+                </div>
+                <div class="flex items-center gap-1.5 text-[10px] sm:text-[11px] text-on-surface-variant font-medium">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#b8860b] dark:bg-[#d4af37]"></span>
+                  <span>Instant Table Booking</span>
+                </div>
+              </a>
 
+            </div>
+
+            <!-- Adorable Mobile Swipe Indicator Ribbon -->
+            <div class="flex sm:hidden items-center justify-between pt-2 px-1 text-[11px] text-on-surface-variant font-medium">
+              <span class="flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+                <span>Swipe flagship demos</span>
+              </span>
+              <span class="flex items-center gap-1 font-mono text-[10px] text-secondary tracking-wider">
+                <span>3 LIVE</span>
+                <span class="material-symbols-outlined text-xs">arrow_forward</span>
+              </span>
+            </div>
           </div>
 
-          <!-- Jitter Layered Floating Kinetic Pills (Floating outside/over the frame) -->
+          <!-- Jitter Layered Floating Kinetic Pills (Floating safely without viewport clipping) -->
           <!-- Pill 1: Top Right Floating Pill -->
-          <div class="jitter-float-1 absolute -top-3 sm:-top-4 -right-1 sm:-right-3 px-3 sm:px-4 py-1.5 rounded-full ios-glass bg-surface/92 dark:bg-[#1c1c19]/95 border border-black/10 dark:border-white/15 shadow-xl flex items-center gap-2 pointer-events-none z-20">
+          <div class="jitter-float-1 absolute -top-3 sm:-top-4 right-2 sm:-right-3 px-3 sm:px-4 py-1.5 rounded-full ios-glass bg-surface/92 dark:bg-[#1c1c19]/95 border border-black/10 dark:border-white/15 shadow-xl flex items-center gap-2 pointer-events-none z-20">
             <span class="relative flex h-2 w-2">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
               <span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
@@ -610,7 +654,7 @@
           </div>
 
           <!-- Pill 2: Bottom Left Floating Pill -->
-          <div class="jitter-float-2 absolute -bottom-3 sm:-bottom-4 -left-1 sm:-left-3 px-3 sm:px-4 py-1.5 rounded-full ios-glass bg-surface/92 dark:bg-[#1c1c19]/95 border border-black/10 dark:border-white/15 shadow-xl flex items-center gap-1.5 pointer-events-none z-20">
+          <div class="jitter-float-2 absolute -bottom-3 sm:-bottom-4 left-2 sm:-left-3 px-3 sm:px-4 py-1.5 rounded-full ios-glass bg-surface/92 dark:bg-[#1c1c19]/95 border border-black/10 dark:border-white/15 shadow-xl flex items-center gap-1.5 pointer-events-none z-20">
             <span class="material-symbols-outlined text-sm sm:text-base text-secondary">bolt</span>
             <span class="text-[11px] sm:text-xs font-semibold text-on-surface tracking-tight whitespace-nowrap">0.68s LCP • 100/100 Web Vitals</span>
           </div>
@@ -732,12 +776,12 @@
                   <span class="px-space-xs py-0.5 rounded bg-surface-container font-label-sm text-label-sm text-on-surface-variant">Tailwind CSS</span>
                   <span class="px-space-xs py-0.5 rounded bg-surface-container font-label-sm text-label-sm text-on-surface-variant">Luxury Catalog</span>
                 </div>
-                <div class="flex items-center justify-between pt-1">
-                  <a href="https://thekrafe.netlify.app/" target="_blank" rel="noopener noreferrer" class="jitter-split-btn px-3.5 py-1.5 rounded-full bg-primary hover:bg-secondary text-on-primary font-label-sm text-xs flex items-center gap-1.5 transition-colors shadow-xs">
+                <div class="flex items-center justify-between pt-1 gap-2">
+                  <a href="https://thekrafe.netlify.app/" target="_blank" rel="noopener noreferrer" class="jitter-split-btn flex-1 sm:flex-initial text-center justify-center px-4 py-2.5 sm:py-1.5 min-h-[44px] sm:min-h-0 rounded-full bg-primary hover:bg-secondary text-on-primary font-label-sm text-xs font-semibold flex items-center gap-1.5 transition-all shadow-xs active:scale-95">
                     <span>Visit Live Site</span>
                     <span class="material-symbols-outlined text-xs btn-arrow-icon">north_east</span>
                   </a>
-                  <button type="button" class="jitter-split-btn px-3 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-xs flex items-center gap-1 transition-colors cursor-pointer" data-project-id="laura-jewellery">
+                  <button type="button" class="jitter-split-btn px-4 py-2.5 sm:py-1.5 min-h-[44px] sm:min-h-0 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-xs font-medium flex items-center justify-center gap-1 transition-all cursor-pointer active:scale-95" data-project-id="laura-jewellery">
                     <span>Quick View</span>
                     <span class="material-symbols-outlined text-xs">visibility</span>
                   </button>
@@ -747,7 +791,7 @@
           </div>
 
           <!-- 2. ID FITNESS -->
-          <div class="tilt-card-container project-card group relative flex flex-col rounded-2xl p-[1px] transition-all duration-300" data-category="fitness">
+          <div class="tilt-card-container project-card group relative flex flex-col rounded-2xl p-[1px] transition-all duration-300 active:scale-[0.99]" data-category="fitness">
             <div class="card-spotlight absolute inset-0 pointer-events-none rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
             <div class="card-inner relative w-full h-full bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 border border-surface-container flex flex-col justify-between">
               <div>
@@ -777,12 +821,12 @@
                   <span class="px-space-xs py-0.5 rounded bg-surface-container font-label-sm text-label-sm text-on-surface-variant">Lead Booking</span>
                   <span class="px-space-xs py-0.5 rounded bg-surface-container font-label-sm text-label-sm text-on-surface-variant">Performance SLA</span>
                 </div>
-                <div class="flex items-center justify-between pt-1">
-                  <a href="https://fit-all.netlify.app/" target="_blank" rel="noopener noreferrer" class="jitter-split-btn px-3.5 py-1.5 rounded-full bg-primary hover:bg-secondary text-on-primary font-label-sm text-xs flex items-center gap-1.5 transition-colors shadow-xs">
+                <div class="flex items-center justify-between pt-1 gap-2">
+                  <a href="https://fit-all.netlify.app/" target="_blank" rel="noopener noreferrer" class="jitter-split-btn flex-1 sm:flex-initial text-center justify-center px-4 py-2.5 sm:py-1.5 min-h-[44px] sm:min-h-0 rounded-full bg-primary hover:bg-secondary text-on-primary font-label-sm text-xs font-semibold flex items-center gap-1.5 transition-all shadow-xs active:scale-95">
                     <span>Visit Live Site</span>
                     <span class="material-symbols-outlined text-xs btn-arrow-icon">north_east</span>
                   </a>
-                  <button type="button" class="jitter-split-btn px-3 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-xs flex items-center gap-1 transition-colors cursor-pointer" data-project-id="id-fitness">
+                  <button type="button" class="jitter-split-btn px-4 py-2.5 sm:py-1.5 min-h-[44px] sm:min-h-0 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-xs font-medium flex items-center justify-center gap-1 transition-all cursor-pointer active:scale-95" data-project-id="id-fitness">
                     <span>Quick View</span>
                     <span class="material-symbols-outlined text-xs">visibility</span>
                   </button>
@@ -792,7 +836,7 @@
           </div>
 
           <!-- 3. Ravi's Kitchen -->
-          <div class="tilt-card-container project-card group relative flex flex-col md:col-span-2 lg:col-span-1 rounded-2xl p-[1px] transition-all duration-300" data-category="hospitality">
+          <div class="tilt-card-container project-card group relative flex flex-col md:col-span-2 lg:col-span-1 rounded-2xl p-[1px] transition-all duration-300 active:scale-[0.99]" data-category="hospitality">
             <div class="card-spotlight absolute inset-0 pointer-events-none rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
             <div class="card-inner relative w-full h-full bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 border border-surface-container flex flex-col justify-between">
               <div>
@@ -822,12 +866,12 @@
                   <span class="px-space-xs py-0.5 rounded bg-surface-container font-label-sm text-label-sm text-on-surface-variant">Playfair Display</span>
                   <span class="px-space-xs py-0.5 rounded bg-surface-container font-label-sm text-label-sm text-on-surface-variant">Digital Menu</span>
                 </div>
-                <div class="flex items-center justify-between pt-1">
-                  <a href="https://gulbarg.netlify.app/" target="_blank" rel="noopener noreferrer" class="jitter-split-btn px-3.5 py-1.5 rounded-full bg-primary hover:bg-secondary text-on-primary font-label-sm text-xs flex items-center gap-1.5 transition-colors shadow-xs">
+                <div class="flex items-center justify-between pt-1 gap-2">
+                  <a href="https://gulbarg.netlify.app/" target="_blank" rel="noopener noreferrer" class="jitter-split-btn flex-1 sm:flex-initial text-center justify-center px-4 py-2.5 sm:py-1.5 min-h-[44px] sm:min-h-0 rounded-full bg-primary hover:bg-secondary text-on-primary font-label-sm text-xs font-semibold flex items-center gap-1.5 transition-all shadow-xs active:scale-95">
                     <span>Visit Live Site</span>
                     <span class="material-symbols-outlined text-xs btn-arrow-icon">north_east</span>
                   </a>
-                  <button type="button" class="jitter-split-btn px-3 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-xs flex items-center gap-1 transition-colors cursor-pointer" data-project-id="ravis-kitchen">
+                  <button type="button" class="jitter-split-btn px-4 py-2.5 sm:py-1.5 min-h-[44px] sm:min-h-0 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-xs font-medium flex items-center justify-center gap-1 transition-all cursor-pointer active:scale-95" data-project-id="ravis-kitchen">
                     <span>Quick View</span>
                     <span class="material-symbols-outlined text-xs">visibility</span>
                   </button>
@@ -880,109 +924,86 @@
 </div>
 
 <!-- 4 Process Cards -->
-
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-md">
 
 <!-- Step 1 -->
-
-<div class="reveal-item p-space-lg bg-surface-container-low rounded-xl flex flex-col justify-between h-full group hover:bg-surface-container transition-all">
-
-<div>
-
-<span class="font-display-lg text-headline-lg text-secondary/40 font-light block mb-space-sm">01</span>
-
-<h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-xs">Discovery &amp; Strategy</h3>
-
-<p class="font-body-md text-body-md text-on-surface-variant">
-
-            Deep dive into your customer profile, value metrics, revenue levers, and market competitors to draft a targeted project scope.
-
-          </p>
-
-</div>
-
-<div class="pt-space-md mt-space-md">
-
-<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider block">Duration: 3–5 Days</span>
-
-</div>
-
+<div class="reveal-item p-space-lg bg-surface-container-low rounded-2xl border border-surface-container dark:border-white/5 flex flex-col justify-between h-full group hover:border-secondary/40 hover:bg-surface-container transition-all active:scale-[0.99] shadow-xs">
+  <div>
+    <div class="flex items-center justify-between mb-space-sm">
+      <span class="w-8 h-8 rounded-xl bg-surface-container-high dark:bg-white/10 flex items-center justify-center text-secondary font-mono text-xs font-bold shadow-2xs">01</span>
+      <span class="material-symbols-outlined text-secondary/70 text-xl">psychology</span>
+    </div>
+    <h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-xs font-semibold">Discovery &amp; Strategy</h3>
+    <p class="font-body-md text-sm text-on-surface-variant leading-relaxed">
+      Deep dive into your customer profile, value metrics, revenue levers, and market competitors to draft a targeted project scope.
+    </p>
+  </div>
+  <div class="pt-space-md mt-space-md border-t border-surface-container/60">
+    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container dark:bg-white/5 font-label-sm text-xs text-on-surface font-medium">
+      <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+      <span>Duration: 3–5 Days</span>
+    </span>
+  </div>
 </div>
 
 <!-- Step 2 -->
-
-<div class="reveal-item p-space-lg bg-surface-container-low rounded-xl flex flex-col justify-between h-full group hover:bg-surface-container transition-all">
-
-<div>
-
-<span class="font-display-lg text-headline-lg text-secondary/40 font-light block mb-space-sm">02</span>
-
-<h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-xs">Editorial Design</h3>
-
-<p class="font-body-md text-body-md text-on-surface-variant">
-
-            Bespoke aesthetic direction, typographical hierarchy, and interactive prototypes crafted directly in Figma with responsive rigor.
-
-          </p>
-
-</div>
-
-<div class="pt-space-md mt-space-md">
-
-<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider block">Duration: 5–7 Days</span>
-
-</div>
-
+<div class="reveal-item p-space-lg bg-surface-container-low rounded-2xl border border-surface-container dark:border-white/5 flex flex-col justify-between h-full group hover:border-secondary/40 hover:bg-surface-container transition-all active:scale-[0.99] shadow-xs">
+  <div>
+    <div class="flex items-center justify-between mb-space-sm">
+      <span class="w-8 h-8 rounded-xl bg-surface-container-high dark:bg-white/10 flex items-center justify-center text-secondary font-mono text-xs font-bold shadow-2xs">02</span>
+      <span class="material-symbols-outlined text-secondary/70 text-xl">palette</span>
+    </div>
+    <h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-xs font-semibold">Editorial Design</h3>
+    <p class="font-body-md text-sm text-on-surface-variant leading-relaxed">
+      Bespoke aesthetic direction, typographical hierarchy, and interactive prototypes crafted directly in Figma with responsive rigor.
+    </p>
+  </div>
+  <div class="pt-space-md mt-space-md border-t border-surface-container/60">
+    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container dark:bg-white/5 font-label-sm text-xs text-on-surface font-medium">
+      <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+      <span>Duration: 5–7 Days</span>
+    </span>
+  </div>
 </div>
 
 <!-- Step 3 -->
-
-<div class="reveal-item p-space-lg bg-surface-container-low rounded-xl flex flex-col justify-between h-full group hover:bg-surface-container transition-all">
-
-<div>
-
-<span class="font-display-lg text-headline-lg text-secondary/40 font-light block mb-space-sm">03</span>
-
-<h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-xs">Clean Code &amp; CMS</h3>
-
-<p class="font-body-md text-body-md text-on-surface-variant">
-
-            Production engineering with modern stacks (Next.js, Tailwind, Shopify, Webflow) paired with an intuitive content editor.
-
-          </p>
-
-</div>
-
-<div class="pt-space-md mt-space-md">
-
-<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider block">Duration: 7–10 Days</span>
-
-</div>
-
+<div class="reveal-item p-space-lg bg-surface-container-low rounded-2xl border border-surface-container dark:border-white/5 flex flex-col justify-between h-full group hover:border-secondary/40 hover:bg-surface-container transition-all active:scale-[0.99] shadow-xs">
+  <div>
+    <div class="flex items-center justify-between mb-space-sm">
+      <span class="w-8 h-8 rounded-xl bg-surface-container-high dark:bg-white/10 flex items-center justify-center text-secondary font-mono text-xs font-bold shadow-2xs">03</span>
+      <span class="material-symbols-outlined text-secondary/70 text-xl">terminal</span>
+    </div>
+    <h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-xs font-semibold">Clean Code &amp; CMS</h3>
+    <p class="font-body-md text-sm text-on-surface-variant leading-relaxed">
+      Production engineering with modern stacks (Next.js, Tailwind, Shopify, Webflow) paired with an intuitive content editor.
+    </p>
+  </div>
+  <div class="pt-space-md mt-space-md border-t border-surface-container/60">
+    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container dark:bg-white/5 font-label-sm text-xs text-on-surface font-medium">
+      <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+      <span>Duration: 7–10 Days</span>
+    </span>
+  </div>
 </div>
 
 <!-- Step 4 -->
-
-<div class="reveal-item p-space-lg bg-surface-container-low rounded-xl flex flex-col justify-between h-full group hover:bg-surface-container transition-all">
-
-<div>
-
-<span class="font-display-lg text-headline-lg text-secondary/40 font-light block mb-space-sm">04</span>
-
-<h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-xs">Launch &amp; Growth</h3>
-
-<p class="font-body-md text-body-md text-on-surface-variant">
-
-            Comprehensive QA, accessibility and Core Web Vitals optimization, live domain cutover, and custom analytics configuration.
-
-          </p>
-
-</div>
-
-<div class="pt-space-md mt-space-md">
-
-<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider block">Duration: 2–3 Days</span>
-
+<div class="reveal-item p-space-lg bg-surface-container-low rounded-2xl border border-surface-container dark:border-white/5 flex flex-col justify-between h-full group hover:border-secondary/40 hover:bg-surface-container transition-all active:scale-[0.99] shadow-xs">
+  <div>
+    <div class="flex items-center justify-between mb-space-sm">
+      <span class="w-8 h-8 rounded-xl bg-surface-container-high dark:bg-white/10 flex items-center justify-center text-secondary font-mono text-xs font-bold shadow-2xs">04</span>
+      <span class="material-symbols-outlined text-secondary/70 text-xl">rocket_launch</span>
+    </div>
+    <h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-xs font-semibold">Launch &amp; Growth</h3>
+    <p class="font-body-md text-sm text-on-surface-variant leading-relaxed">
+      Comprehensive QA, accessibility and Core Web Vitals optimization, live domain cutover, and custom analytics configuration.
+    </p>
+  </div>
+  <div class="pt-space-md mt-space-md border-t border-surface-container/60">
+    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container dark:bg-white/5 font-label-sm text-xs text-on-surface font-medium">
+      <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+      <span>Duration: 2–3 Days</span>
+    </span>
+  </div>
 </div>
 
 </div>
@@ -1066,7 +1087,7 @@
         </ul>
       </div>
       <div class="pt-space-lg mt-space-md border-t border-surface-container">
-        <a href="#/inquiry" data-select-tier="tier-basic" class="jitter-split-btn w-full py-3 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-center justify-center block transition-colors">
+        <a href="#/inquiry" data-select-tier="tier-basic" class="jitter-split-btn w-full py-3.5 sm:py-3 min-h-[44px] rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-center justify-center flex items-center transition-all active:scale-95">
           Select Basic Pack (1 Website - ₹4,999)
         </a>
       </div>
@@ -1078,9 +1099,12 @@
         Most Popular • Dynamic Value Pack
       </div>
       <div>
-        <div class="flex items-center justify-between mb-space-sm pt-1">
+        <div class="flex items-center justify-between mb-space-sm pt-1 gap-2 flex-wrap">
           <span class="font-label-sm text-label-sm uppercase tracking-widest text-secondary font-semibold">Tier 02 • Value Pack</span>
-          <span id="calc-savings-badge" class="px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-xs font-semibold">20% Off 1-Year Max Support</span>
+          <button type="button" id="open-discount-modal-btn" class="px-2.5 py-1 rounded-full bg-secondary-fixed hover:bg-secondary hover:text-on-secondary text-on-secondary-fixed font-label-sm text-xs font-semibold transition-all cursor-pointer flex items-center gap-1 active:scale-95 shadow-2xs" title="Click to view volume discounts &amp; savings guide">
+            <span class="material-symbols-outlined text-xs">local_offer</span>
+            <span id="calc-savings-badge">20% Off 1-Year Max Support</span>
+          </button>
         </div>
         <h3 class="font-headline-md text-headline-md text-on-surface mb-1">Multi-Site &amp; Maintenance</h3>
         <p class="font-body-md text-sm text-on-surface-variant mb-space-sm">
@@ -1098,18 +1122,21 @@
 
         <!-- Customize Accordingly Trigger Button (Aesthetic & Uncluttered) -->
         <div class="mb-space-md">
-          <button type="button" id="open-customize-modal-btn" class="w-full p-4 rounded-xl bg-surface-container-low hover:bg-surface-container border border-secondary/30 hover:border-secondary transition-all group cursor-pointer shadow-2xs flex items-center justify-between text-left">
+          <button type="button" id="open-customize-modal-btn" class="w-full p-3.5 sm:p-4 rounded-xl bg-surface-container-low hover:bg-surface-container border border-secondary/40 hover:border-secondary transition-all group cursor-pointer shadow-xs flex items-center justify-between text-left active:scale-[0.98]">
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 rounded-xl bg-secondary/15 text-secondary flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:bg-secondary group-hover:text-on-secondary transition-all">
                 <span class="material-symbols-outlined text-xl">tune</span>
               </div>
               <div>
-                <span class="font-headline-sm text-sm font-bold text-on-surface block">Customize accordingly</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-headline-sm text-sm font-bold text-on-surface block">Customize accordingly</span>
+                  <span class="px-1.5 py-0.2 rounded text-[10px] font-bold bg-secondary/15 text-secondary uppercase tracking-wider">Interactive</span>
+                </div>
                 <span id="card-config-summary" class="font-label-sm text-xs text-on-surface-variant block mt-0.5 font-medium">3 Websites • 1 Year (Max) Maintenance</span>
               </div>
             </div>
             <div class="flex items-center gap-1.5 text-xs font-semibold text-secondary group-hover:translate-x-1 transition-transform shrink-0">
-              <span>Tailor Scope</span>
+              <span class="hidden sm:inline">Tailor Scope</span>
               <span class="material-symbols-outlined text-sm">arrow_forward</span>
             </div>
           </button>
@@ -1140,7 +1167,7 @@
         </ul>
       </div>
       <div class="pt-space-lg mt-space-md border-t border-surface-container">
-        <a href="#/inquiry" id="calc-submit-btn" data-select-tier="tier-value-pack" class="jitter-split-btn w-full py-3.5 rounded-full bg-primary hover:bg-secondary text-on-primary font-label-md text-center justify-center block transition-colors shadow-md font-semibold">
+        <a href="#/inquiry" id="calc-submit-btn" data-select-tier="tier-value-pack" class="jitter-split-btn w-full py-3.5 min-h-[44px] rounded-full bg-primary hover:bg-secondary text-on-primary font-label-md text-center justify-center flex items-center transition-all shadow-md font-semibold active:scale-95">
           Select Value Pack (₹44,998)
         </a>
       </div>
@@ -1192,7 +1219,7 @@
         </ul>
       </div>
       <div class="pt-space-lg mt-space-md border-t border-surface-container">
-        <a href="#/inquiry" data-select-tier="tier-custom" class="jitter-split-btn w-full py-3 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-center justify-center block transition-colors">
+        <a href="#/inquiry" data-select-tier="tier-custom" class="jitter-split-btn w-full py-3.5 sm:py-3 min-h-[44px] rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-center justify-center flex items-center transition-all active:scale-95">
           Book Strategy Call / Talk to Us
         </a>
       </div>
@@ -3002,7 +3029,10 @@ Back to All Live Releases
               <span class="material-symbols-outlined text-sm text-secondary">local_offer</span>
               <span>Volume Discounts &amp; Savings Rules</span>
             </span>
-            <span id="popup-savings-badge" class="px-2.5 py-0.5 rounded-full bg-secondary text-on-secondary font-label-sm text-[11px] font-bold">20% Off 1-Year Max Support</span>
+            <button type="button" id="popup-open-discount-guide-btn" class="px-2.5 py-0.5 rounded-full bg-secondary text-on-secondary hover:bg-secondary/90 font-label-sm text-[11px] font-bold cursor-pointer transition-colors flex items-center gap-1 active:scale-95 shadow-2xs" title="Click to view full volume discount guide">
+              <span id="popup-savings-badge">20% Off 1-Year Max Support</span>
+              <span class="material-symbols-outlined text-xs">arrow_forward</span>
+            </button>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">

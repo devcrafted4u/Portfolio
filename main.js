@@ -56,6 +56,7 @@ const PROJECTS_DATA = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+  document.documentElement.classList.add('js-ready');
   document.body.style.overflow = '';
   initTheme();
   initRouting();
@@ -314,7 +315,12 @@ function initProjectModal() {
     modal.classList.remove('opacity-0', 'pointer-events-none');
     const dialog = modal.querySelector('div.relative');
     if (dialog) {
-      animate(dialog, { scale: [0.92, 1], opacity: [0, 1] }, { duration: 0.35, easing: [0.16, 1, 0.3, 1] });
+      try {
+        animate(dialog, { scale: [0.92, 1], opacity: [0, 1] }, { duration: 0.35, easing: [0.16, 1, 0.3, 1] });
+      } catch {
+        dialog.style.opacity = '1';
+        dialog.style.transform = 'none';
+      }
     }
     document.body.style.overflow = 'hidden';
   }
@@ -322,10 +328,18 @@ function initProjectModal() {
   function closeModal() {
     const dialog = modal.querySelector('div.relative');
     if (dialog) {
-      animate(dialog, { scale: [1, 0.94], opacity: [1, 0] }, { duration: 0.25, easing: [0.16, 1, 0.3, 1] }).finished.then(() => {
+      try {
+        animate(dialog, { scale: [1, 0.94], opacity: [1, 0] }, { duration: 0.25, easing: [0.16, 1, 0.3, 1] }).finished.then(() => {
+          modal.classList.add('opacity-0', 'pointer-events-none');
+          document.body.style.overflow = '';
+        }).catch(() => {
+          modal.classList.add('opacity-0', 'pointer-events-none');
+          document.body.style.overflow = '';
+        });
+      } catch {
         modal.classList.add('opacity-0', 'pointer-events-none');
         document.body.style.overflow = '';
-      });
+      }
     } else {
       modal.classList.add('opacity-0', 'pointer-events-none');
       document.body.style.overflow = '';
@@ -579,7 +593,12 @@ function initCustomizeModal() {
     modal.classList.remove('opacity-0', 'pointer-events-none');
     const dialog = modal.querySelector('div.relative');
     if (dialog) {
-      animate(dialog, { scale: [0.92, 1], opacity: [0, 1] }, { duration: 0.32, easing: [0.16, 1, 0.3, 1] });
+      try {
+        animate(dialog, { scale: [0.92, 1], opacity: [0, 1] }, { duration: 0.32, easing: [0.16, 1, 0.3, 1] });
+      } catch {
+        dialog.style.opacity = '1';
+        dialog.style.transform = 'none';
+      }
     }
     document.body.style.overflow = 'hidden';
   }
@@ -587,10 +606,18 @@ function initCustomizeModal() {
   function closeModal() {
     const dialog = modal.querySelector('div.relative');
     if (dialog) {
-      animate(dialog, { scale: [1, 0.94], opacity: [1, 0] }, { duration: 0.22, easing: [0.16, 1, 0.3, 1] }).finished.then(() => {
+      try {
+        animate(dialog, { scale: [1, 0.94], opacity: [1, 0] }, { duration: 0.22, easing: [0.16, 1, 0.3, 1] }).finished.then(() => {
+          modal.classList.add('opacity-0', 'pointer-events-none');
+          document.body.style.overflow = '';
+        }).catch(() => {
+          modal.classList.add('opacity-0', 'pointer-events-none');
+          document.body.style.overflow = '';
+        });
+      } catch {
         modal.classList.add('opacity-0', 'pointer-events-none');
         document.body.style.overflow = '';
-      });
+      }
     } else {
       modal.classList.add('opacity-0', 'pointer-events-none');
       document.body.style.overflow = '';
@@ -638,7 +665,12 @@ function initDiscountModal() {
     modal.classList.remove('opacity-0', 'pointer-events-none');
     const dialog = modal.querySelector('div.relative');
     if (dialog) {
-      animate(dialog, { scale: [0.92, 1], opacity: [0, 1] }, { duration: 0.32, easing: [0.16, 1, 0.3, 1] });
+      try {
+        animate(dialog, { scale: [0.92, 1], opacity: [0, 1] }, { duration: 0.32, easing: [0.16, 1, 0.3, 1] });
+      } catch {
+        dialog.style.opacity = '1';
+        dialog.style.transform = 'none';
+      }
     }
     document.body.style.overflow = 'hidden';
   }
@@ -646,10 +678,18 @@ function initDiscountModal() {
   function closeModal() {
     const dialog = modal.querySelector('div.relative');
     if (dialog) {
-      animate(dialog, { scale: [1, 0.94], opacity: [1, 0] }, { duration: 0.22, easing: [0.16, 1, 0.3, 1] }).finished.then(() => {
+      try {
+        animate(dialog, { scale: [1, 0.94], opacity: [1, 0] }, { duration: 0.22, easing: [0.16, 1, 0.3, 1] }).finished.then(() => {
+          modal.classList.add('opacity-0', 'pointer-events-none');
+          document.body.style.overflow = '';
+        }).catch(() => {
+          modal.classList.add('opacity-0', 'pointer-events-none');
+          document.body.style.overflow = '';
+        });
+      } catch {
         modal.classList.add('opacity-0', 'pointer-events-none');
         document.body.style.overflow = '';
-      });
+      }
     } else {
       modal.classList.add('opacity-0', 'pointer-events-none');
       document.body.style.overflow = '';
@@ -1007,16 +1047,27 @@ function initMobileMenu() {
 
   function closeDrawer() {
     if (drawer.classList.contains('hidden')) return;
-    animate(drawer, { opacity: [1, 0], y: [0, -10] }, { duration: 0.2 }).finished.then(() => {
+    try {
+      animate(drawer, { opacity: [1, 0], y: [0, -10] }, { duration: 0.2 }).finished.then(() => {
+        drawer.classList.add('hidden');
+      }).catch(() => {
+        drawer.classList.add('hidden');
+      });
+    } catch {
       drawer.classList.add('hidden');
-    });
+    }
     const icon = menuBtn.querySelector('.material-symbols-outlined');
     if (icon) icon.textContent = 'menu';
   }
 
   function openDrawer() {
     drawer.classList.remove('hidden');
-    animate(drawer, { opacity: [0, 1], y: [-15, 0] }, { duration: 0.35, easing: [0.16, 1, 0.3, 1] });
+    try {
+      animate(drawer, { opacity: [0, 1], y: [-15, 0] }, { duration: 0.35, easing: [0.16, 1, 0.3, 1] });
+    } catch {
+      drawer.style.opacity = '1';
+      drawer.style.transform = 'none';
+    }
     const icon = menuBtn.querySelector('.material-symbols-outlined');
     if (icon) icon.textContent = 'close';
   }
@@ -1109,19 +1160,26 @@ function initHeroStagger() {
   const items = document.querySelectorAll('#view-home .hero-stagger-item');
   if (!items.length) return;
 
-  animate(
-    items,
-    {
-      opacity: [0, 1],
-      y: [18, 0],
-      scale: [0.99, 1]
-    },
-    {
-      delay: stagger(0.06, { start: 0.08 }),
-      duration: 0.65,
-      easing: [0.16, 1, 0.3, 1]
-    }
-  );
+  try {
+    animate(
+      items,
+      {
+        opacity: [0, 1],
+        y: [18, 0],
+        scale: [0.99, 1]
+      },
+      {
+        delay: stagger(0.06, { start: 0.08 }),
+        duration: 0.65,
+        easing: [0.16, 1, 0.3, 1]
+      }
+    );
+  } catch {
+    items.forEach(el => {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+    });
+  }
 }
 
 // B. Jitter-Free Counter Count-Up for Key Metrics
@@ -1302,26 +1360,54 @@ function initMagneticElements() {
   });
 }
 
-// E. In-View Viewport Reveals for Process & Pricing Cards
+// E. In-View Viewport Reveals for Process & Pricing Cards (Mobile-Resilient)
 function initScrollReveals() {
   const items = document.querySelectorAll('.reveal-item');
   if (!items.length) return;
 
-  try {
-    inView('.reveal-item', (element) => {
-      if (element && element.classList) {
-        element.classList.add('is-revealed');
+  // Reveal elements immediately that are already in or near current viewport (e.g. above the fold or on fast scroll)
+  const windowHeight = window.innerHeight || 800;
+  items.forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top <= windowHeight + 120) {
+      el.classList.add('is-revealed');
+    }
+  });
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-revealed');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {
+      rootMargin: '120px 0px',
+      threshold: 0.05
+    });
+
+    items.forEach(el => {
+      if (!el.classList.contains('is-revealed')) {
+        observer.observe(el);
       }
-    }, { amount: 0.1 });
-  } catch (err) {
-    console.warn('Motion inView fallback triggered:', err);
-    items.forEach(el => el.classList.add('is-revealed'));
+    });
+  } else {
+    try {
+      inView('.reveal-item', (element) => {
+        if (element && element.classList) {
+          element.classList.add('is-revealed');
+        }
+      }, { amount: 0.05 });
+    } catch {
+      items.forEach(el => el.classList.add('is-revealed'));
+    }
   }
 
-  // Safety fallback: reveal all items after 1.2s so content is never stuck invisible
+  // Safety fallback: reveal all items after 600ms so content is NEVER stuck invisible on any device
   setTimeout(() => {
     items.forEach(el => el.classList.add('is-revealed'));
-  }, 1200);
+  }, 600);
 }
 
 // F. Hardware-Accelerated Scroll Progress, Dynamic Island Navbar & Back-to-Top
