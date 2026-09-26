@@ -55,28 +55,43 @@ const PROJECTS_DATA = {
   }
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+function startApp() {
   document.documentElement.classList.add('js-ready');
   document.body.style.overflow = '';
-  initTheme();
-  initRouting();
-  initProjectModal();
-  initWorkFilters();
-  initPricingCalculator();
-  initSwatches();
-  initInquiryForm();
-  initMobileMenu();
-  initLiveClock();
-  fixInternalLinks();
 
-  // Modern Animation Suite
-  initHeroStagger();
-  initCountUpMetrics();
-  init3DCardTilt();
-  initMagneticElements();
-  initScrollReveals();
-  initScrollExtras();
-});
+  const inits = [
+    { name: 'Theme', fn: initTheme },
+    { name: 'Routing', fn: initRouting },
+    { name: 'ProjectModal', fn: initProjectModal },
+    { name: 'WorkFilters', fn: initWorkFilters },
+    { name: 'PricingCalculator', fn: initPricingCalculator },
+    { name: 'Swatches', fn: initSwatches },
+    { name: 'InquiryForm', fn: initInquiryForm },
+    { name: 'MobileMenu', fn: initMobileMenu },
+    { name: 'LiveClock', fn: initLiveClock },
+    { name: 'InternalLinks', fn: fixInternalLinks },
+    { name: 'HeroStagger', fn: initHeroStagger },
+    { name: 'CountUpMetrics', fn: initCountUpMetrics },
+    { name: '3DCardTilt', fn: init3DCardTilt },
+    { name: 'MagneticElements', fn: initMagneticElements },
+    { name: 'ScrollReveals', fn: initScrollReveals },
+    { name: 'ScrollExtras', fn: initScrollExtras },
+  ];
+
+  for (const { name, fn } of inits) {
+    try {
+      fn();
+    } catch (err) {
+      console.warn(`[devcrafted4u] ${name} initialization failed:`, err);
+    }
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', startApp);
+} else {
+  startApp();
+}
 
 // 1. Dark Mode / Theme Engine with Animated Circular Wave Transition & Icon Physics
 function initTheme() {
@@ -84,9 +99,17 @@ function initTheme() {
   const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
 
   function getSavedTheme() {
-    const saved = localStorage.getItem('atelier_theme');
-    if (saved) return saved;
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    try {
+      const saved = localStorage.getItem('atelier_theme');
+      if (saved) return saved;
+    } catch (e) {
+      console.warn('Storage access warning:', e);
+    }
+    try {
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    } catch {
+      return 'light';
+    }
   }
 
   function applyTheme(theme) {
@@ -103,7 +126,11 @@ function initTheme() {
       const label = document.getElementById('mobile-theme-label');
       if (label) label.textContent = 'Dark Mode';
     }
-    localStorage.setItem('atelier_theme', theme);
+    try {
+      localStorage.setItem('atelier_theme', theme);
+    } catch (e) {
+      // Ignore quota or privacy mode restriction
+    }
   }
 
   const currentTheme = getSavedTheme();
